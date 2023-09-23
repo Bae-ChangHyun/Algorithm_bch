@@ -1,6 +1,6 @@
 # 백준: https://www.acmicpc.net/problem/2805
 # 풀이: https://changsroad.tistory.com/287
-# 알고리즘: binary search
+# 알고리즘: 이진탐색
 
 # 예제 입력
 # ---------------------------
@@ -10,6 +10,7 @@
 # 예제 출력
 # ---------------------------
 # 15
+
 import sys
 input = sys.stdin.readline
 
