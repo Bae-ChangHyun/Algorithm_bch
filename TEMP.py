@@ -1,45 +1,32 @@
+from collections import deque
+from itertools import product
 import sys
 input = sys.stdin.readline
-INF = int(1e9)
 
-N, M, C = map(int, input().split())
-visited = [0 for _ in range(N+1)]
-graph = [[] for _ in range(N+1)]
-distance = [INF for _ in range(N+1)]
-
-# 그래프 입력받음
-for i in range(M):
-    a, b, c = map(int, input().split())
-    graph[a].append([b, c])
+n, m = map(int, input().split())  # 판 크기, 상대편 수
+x, y = map(int, input().split())  # 나이트 위치
+visit = [[0]*(n+1) for i in range(n+1)]  # 방문 횟수 기록
+target = []
+dir = [[-2, -1], [-2, 1], [-1, -2], [-1, 2],
+       [1, -2], [1, 2], [2, -1], [2, 1]]
 
 
-def get_min(start):
-    min_value = INF
-    idx = 0
-    for i in range(1, N+1):
-        if ((distance[i] < min_value) and (visited[i] == 0)):
-            min_value = distance[i]
-            idx = i
-    return idx
+def bfs(x, y):
+    q = deque()
+    q.append((x, y))
+    visit[x][y] = 0
+
+    while q:
+        x, y = q.popleft()
+        for i in dir:
+            nowx, nowy = x+i[0], y+i[1]
+            if (1 <= nowx <= n and 1 <= nowy <= n and visit[nowx][nowy] == 0):
+                q.append((nowx, nowy))
+                visit[nowx][nowy] = visit[x][y]+1
 
 
-def dijkstra(start):
-    distance[start] = 0
-    visited[start] = 1
-
-    for j in graph[start]:
-        distance[j[0]] = j[1]
-
-    for i in range(N-1):
-        now = get_min(start)
-        visited[now] = 1
-        for j in graph[now]:
-            cost = distance[now] + j[1]
-
-            if (cost < distance[j[0]]):
-                distance[j[0]] = cost
-
-
-dijkstra(C)
-
-print(distance[C])
+for i in range(m):
+    target.append(list(map(int, input().split())))
+bfs(x, y)
+for i in target:
+    print(visit[i[0]][i[1]])
